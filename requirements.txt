@@ -1,9 +1,6 @@
 streamlit
 spacy
-datetime
 pandas
-plotly.express
-spellchecker
-collections 
+plotly
+pyspellchecker
 HanTa
-time
