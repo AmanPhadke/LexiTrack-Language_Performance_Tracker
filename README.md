@@ -1,6 +1,6 @@
 # LexiTrack: German Language Performance Tracker
 
-A comprehensive Streamlit-based application for analyzing German language proficiency and text complexity. LexiTrack provides detailed linguistic analysis, error detection, and CEFR level assessment for German learner texts.
+A comprehensive Streamlit-based application specifically created for my personal application for analyzing German language proficiency and text complexity. LexiTrack provides detailed linguistic analysis, error detection, and CEFR level assessment for German learner texts.
 
 ## 🎯 Features
 
