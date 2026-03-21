@@ -1,6 +1,7 @@
-streamlit
-spacy
-pandas
-plotly
-pyspellchecker
-HanTa
+streamlit>=1.28.0
+spacy>=3.8.0
+pandas>=2.0.0
+plotly>=5.17.0
+pyspellchecker>=0.7.2
+HanTa>=0.2.11
+pydantic>=2.0.0
