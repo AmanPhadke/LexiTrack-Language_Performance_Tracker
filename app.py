@@ -15,13 +15,9 @@ import time
 import subprocess
 import sys
 
-def load_model():  # Remove @st.cache_resource for now
-    try:
-        nlp = spacy.load('de_core_news_sm')
-    except OSError:
-        subprocess.check_call([sys.executable, "-m", "spacy", "download", "de_core_news_sm"])
-        nlp = spacy.load('de_core_news_sm')
-    
+def load_model():
+    # Models are pre-installed via requirements.txt
+    nlp = spacy.load('de_core_news_sm')
     tagger = ht.HanoverTagger('morphmodel_ger.pgz')
     spell = SpellChecker(language='de')
     spell_en = SpellChecker(language='en')
