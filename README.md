@@ -1,4 +1,4 @@
-<img width="1808" height="853" alt="Screenshot 2026-03-21 162547" src="https://github.com/user-attachments/assets/0306851f-d445-4df0-9186-4d41871d1228" /># LexiTrack: German Language Performance Tracker
+# LexiTrack: German Language Performance Tracker
 
 A comprehensive Streamlit-based application for analyzing German language proficiency and text complexity. LexiTrack provides detailed linguistic analysis, error detection, and CEFR level assessment for German learner texts.
 
