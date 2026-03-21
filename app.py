@@ -16,12 +16,14 @@ import subprocess
 import sys
 
 def load_model():
-    # Models are pre-installed via requirements.txt
-    nlp = spacy.load('de_core_news_sm')
+    model = 'de_core_news_md'
+    # HanTa model file must be present in the working directory (or provide an absolute path)
     tagger = ht.HanoverTagger('morphmodel_ger.pgz')
+    nlp = spacy.load(model)
     spell = SpellChecker(language='de')
     spell_en = SpellChecker(language='en')
     return nlp, tagger, spell, spell_en
+#Returning - nlp, tagger, spelling checker, spelling checker (english)
 # ----------------------------------------------------------------------------
 # Basic Features
 # ----------------------------------------------------------------------------
@@ -843,35 +845,33 @@ with tab2:
     
     col1, col2, col3 = st.columns(3)
     
-    try:
-        basic = basic_features(text, nlp)
-        word_count = basic['word_count']
-        sentence_count = basic['sentence_count']
-        avg_words = basic['average_word_per_sentence']
-        doc = tokenize(text, nlp)
-    
-        with col1:
-            st.metric(
-                "Word Count",
-                word_count,
-                help="Total number of words in the essay"
-            )
-    
-        with col2:
-            st.metric(
-                "Sentence Count",
-                sentence_count,
-                help="Total number of sentences"
-            )
-    
-        with col3:
-            st.metric(
-                "Avg Words/Sentence",
-                round(avg_words, 2),
-                help="Average word count per sentence"
-            )
-    except Exception as e:
-        st.error(f"Error in basic features: {str(e)}")
+    basic = basic_features(text, nlp)
+    word_count = basic['word_count']
+    sentence_count = basic['sentence_count']
+    avg_words = basic['average_word_per_sentence']
+    doc = tokenize(text, nlp)
+
+    with col1:
+        st.metric(
+            "Word Count",
+            word_count,
+            help="Total number of words in the essay"
+        )
+
+    with col2:
+        st.metric(
+            "Sentence Count",
+            sentence_count,
+            help="Total number of sentences"
+        )
+
+    with col3:
+        st.metric(
+            "Avg Words/Sentence",
+            round(avg_words, 2),
+            help="Average word count per sentence"
+        )
+
 
 
     st.subheader('Lexical Diversity Score')
@@ -1059,53 +1059,50 @@ with tab1:
     st.header("Language Proficiency Level")
     st.write('Calculated LCI of text based on the uniqueness and complexity of your text')
 
-    try:
-        mtld_norm, adj_clause_norm, sent_norm, nomin_norm, dep_norm, discourse_norm = normalization(
-            doc, mtld, avg_words, total_clause_found, sub_error_count, word_count, text
-        )
-    
-        lci = lci(
-            word_count, mtld_norm, adj_clause_norm, sent_norm, nomin_norm, dep_norm, 
-            discourse_norm, sub_error_count, verb_error_count, case_error_count, 
-            prep_error_count, article_error_count, cap_error_count, spelling_error_count
-        )
-    
-        cefr_level = cefr(lci)
-    
-        # CEFR Level Display
-        cefr_colors = {
-            # Using your theme palette for consistency
-            'A1': '#19C2C9',
-            'A2': '#0FB8BF',
-            'B1': '#05B2B9',
-            'B2': '#00ADB5',
-            'C1': '#007F85',
-            'C2': '#004F53'
-        }
-    
-        color = cefr_colors.get(cefr_level, '#00ADB5')
-    
-        st.markdown(f"""
-        <div style="
-            background: linear-gradient(135deg, {color} 0%, {color}cc 100%);
-            color: #F3F4F4;
-            padding: 3rem;
-            border-radius: 14px;
-            text-align: center;
-            margin: 2rem 0;
-        ">
-            <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 1rem;">Language Complexity Index (LCI)</p>
-            <p style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem;">{round(lci, 2)}</p>
-            <p style="font-size: 0.9rem; opacity: 0.85; margin-bottom: 1.5rem;">Estimated Proficiency Level</p>
-            <p style="font-size: 4rem; font-weight: 900; margin-bottom: 1rem; text-shadow: 0 4px 8px rgba(0,0,0,0.2);">{cefr_level}</p>
-            <p style="font-size: 1rem; opacity: 0.95;">
-                {'Beginner' if cefr_level in ['A1', 'A2'] else 'Intermediate' if cefr_level in ['B1', 'B2'] else 'Advanced'}
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    except Exception as e:
-        st.error(f"Error in CEFR assessment: {str(e)}")
+
+    mtld_norm, adj_clause_norm, sent_norm, nomin_norm, dep_norm, discourse_norm = normalization(
+        doc, mtld, avg_words, total_clause_found, sub_error_count, word_count, text
+    )
+
+    lci = lci(
+        word_count, mtld_norm, adj_clause_norm, sent_norm, nomin_norm, dep_norm, 
+        discourse_norm, sub_error_count, verb_error_count, case_error_count, 
+        prep_error_count, article_error_count, cap_error_count, spelling_error_count
+    )
+
+    cefr_level = cefr(lci)
+
+    # CEFR Level Display
+    cefr_colors = {
+        # Using your theme palette for consistency
+        'A1': '#19C2C9',
+        'A2': '#0FB8BF',
+        'B1': '#05B2B9',
+        'B2': '#00ADB5',
+        'C1': '#007F85',
+        'C2': '#004F53'
+    }
+
+    color = cefr_colors.get(cefr_level, '#00ADB5')
+
+    st.markdown(f"""
+    <div style="
+        background: linear-gradient(135deg, {color} 0%, {color}cc 100%);
+        color: #F3F4F4;
+        padding: 3rem;
+        border-radius: 14px;
+        text-align: center;
+        margin: 2rem 0;
+    ">
+        <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 1rem;">Language Complexity Index (LCI)</p>
+        <p style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem;">{round(lci, 2)}</p>
+        <p style="font-size: 0.9rem; opacity: 0.85; margin-bottom: 1.5rem;">Estimated Proficiency Level</p>
+        <p style="font-size: 4rem; font-weight: 900; margin-bottom: 1rem; text-shadow: 0 4px 8px rgba(0,0,0,0.2);">{cefr_level}</p>
+        <p style="font-size: 1rem; opacity: 0.95;">
+            {'Beginner' if cefr_level in ['A1', 'A2'] else 'Intermediate' if cefr_level in ['B1', 'B2'] else 'Advanced'}
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 
 st.caption(
