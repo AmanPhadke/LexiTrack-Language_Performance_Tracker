@@ -3,5 +3,4 @@ spacy==3.5.0
 pandas==2.0.3
 plotly==5.17.0
 pyspellchecker==0.7.2
-HanTa==0.2.11
-pydantic==1.10.12
+HanTa==1.1.2
