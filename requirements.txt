@@ -1,0 +1,9 @@
+streamlit
+spacy
+datetime
+pandas
+plotly.express
+spellchecker
+collections 
+HanTa
+time
