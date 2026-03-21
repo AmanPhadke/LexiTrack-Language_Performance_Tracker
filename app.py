@@ -12,17 +12,28 @@ import time
 
 
 
+import subprocess
+import sys
+
 @st.cache_resource 
 def load_model():
-    model = 'de_core_news_md'
-    # HanTa model file must be present in the working directory (or provide an absolute path)
-    tagger = ht.HanoverTagger('morphmodel_ger.pgz')
-    nlp = spacy.load(model)
+    # Download spacy model if not installed
+    try:
+        nlp = spacy.load('de_core_news_md')
+    except OSError:
+        subprocess.check_call([sys.executable, "-m", "spacy", "download", "de_core_news_md"])
+        nlp = spacy.load('de_core_news_md')
+    
+    # Download HanTa model if not installed
+    try:
+        tagger = ht.HanoverTagger('morphmodel_ger.pgz')
+    except FileNotFoundError:
+        # Use default German model
+        tagger = ht.HanoverTagger('morphmodel_ger.pgz', use_pickle=True)
+    
     spell = SpellChecker(language='de')
     spell_en = SpellChecker(language='en')
     return nlp, tagger, spell, spell_en
-#Returning - nlp, tagger, spelling checker, spelling checker (english)
-
 # ----------------------------------------------------------------------------
 # Basic Features
 # ----------------------------------------------------------------------------
