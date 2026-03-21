@@ -15,22 +15,14 @@ import time
 import subprocess
 import sys
 
-@st.cache_resource 
-def load_model():
-    # Download spacy model if not installed
+def load_model():  # Remove @st.cache_resource for now
     try:
-        nlp = spacy.load('de_core_news_md')
+        nlp = spacy.load('de_core_news_sm')
     except OSError:
-        subprocess.check_call([sys.executable, "-m", "spacy", "download", "de_core_news_md"])
-        nlp = spacy.load('de_core_news_md')
+        subprocess.check_call([sys.executable, "-m", "spacy", "download", "de_core_news_sm"])
+        nlp = spacy.load('de_core_news_sm')
     
-    # Download HanTa model if not installed
-    try:
-        tagger = ht.HanoverTagger('morphmodel_ger.pgz')
-    except FileNotFoundError:
-        # Use default German model
-        tagger = ht.HanoverTagger('morphmodel_ger.pgz', use_pickle=True)
-    
+    tagger = ht.HanoverTagger('morphmodel_ger.pgz')
     spell = SpellChecker(language='de')
     spell_en = SpellChecker(language='en')
     return nlp, tagger, spell, spell_en
